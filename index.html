@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pedro Paiva — Frontend Developer</title>
+<meta name="description" content="Pedro Paiva is a frontend developer in Brazil building interfaces for large-scale digital products.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext x=%2750%27 y=%2778%27 font-size=%2780%27 text-anchor=%27middle%27%3E%E2%96%AA%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #222222;
+    --fg: #f4f4f4;
+    --muted: #8c8c8c;
+    --rule: #f4f4f4;
+    --dash: #5a5a5a;
+    --focus: #f4f4f4;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    --col: 38ch;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --bg: #f4f4f1; --fg: #1c1c1c; --muted: #77776f; --rule: #1c1c1c; --dash: #b4b4ac; --focus: #1c1c1c;
+    }
+  }
+  :root[data-theme="dark"]  { --bg: #222222; --fg: #f4f4f4; --muted: #8c8c8c; --rule: #f4f4f4; --dash: #5a5a5a; --focus: #f4f4f4; }
+  :root[data-theme="light"] { --bg: #f4f4f1; --fg: #1c1c1c; --muted: #77776f; --rule: #1c1c1c; --dash: #b4b4ac; --focus: #1c1c1c; }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 3.5rem); }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  body:has(dialog.proj[open]) { overflow: hidden; }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  a:focus-visible, button:focus-visible { outline: 1px solid var(--focus); outline-offset: 3px; }
+  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  button:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  /* Centered single column, frilo.io-style (mx-auto + px-6) */
+  .page { width: 100%; max-width: 540px; margin: 0 auto; padding: 0 24px 96px; }
+
+  /* ---------- header ---------- */
+  header {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 5;
+    background: var(--bg);
+    padding: 12px 0 14px;
+  }
+  header .id strong { font-weight: 600; text-transform: uppercase; display: block; }
+  header .id span { display: block; }
+
+  /* ---------- hero ---------- */
+  .hero { padding: 36px 0 44px; }
+  .hero p { margin: 0 0 1.6em; }
+  .hero ul { list-style: none; margin: 0; padding: 0; }
+
+  /* ---------- sections ---------- */
+  section.block { margin-top: 40px; }
+  .block h2 { margin: 0 0 12px; font: inherit; font-weight: 600; text-transform: uppercase; }
+  .block h2 .n { display: block; font-weight: 400; }
+  .rule { border: 0; border-top: 1px solid var(--rule); margin: 0 0 20px; }
+
+  .rows { list-style: none; margin: 0; padding: 0; }
+  .rows li + li { margin-top: 12px; }
+  .rows.loose li + li { margin-top: 16px; }
+
+  .row { display: grid; grid-template-columns: 4ch 1fr auto; align-items: baseline; }
+  .row .title { text-transform: uppercase; }
+  .row .arrow { padding-left: 1ch; }
+  .row .meta { grid-column: 2 / -1; color: var(--muted); }
+
+  .writing { display: grid; grid-template-columns: 7ch 1fr auto; align-items: baseline; }
+  .writing .arrow { padding-left: 1ch; }
+
+  a.row:hover, a.writing:hover { text-decoration: none; }
+  a.row:hover .title, a.writing:hover .title { text-decoration: underline; text-underline-offset: 3px; }
+
+  .product p { margin: 0; }
+  .product .cta { display: inline-block; margin-top: 14px; }
+  .contact-link { display: flex; justify-content: space-between; }
+
+  footer { margin-top: 64px; }
+  footer strong { font-weight: 600; text-transform: uppercase; display: block; }
+
+  .theme {
+    position: fixed;
+    right: 20px;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+    color: var(--muted);
+    padding: 4px 0;
+  }
+  .theme button { color: var(--muted); }
+  .theme button:hover { color: var(--fg); }
+  .theme button[aria-pressed="true"] { color: var(--fg); }
+
+  /* ---------- project modal ---------- */
+  dialog.proj {
+    padding: 0;
+    margin: auto;
+    border: 1px solid var(--rule);
+    background: var(--bg);
+    color: var(--fg);
+    font: inherit;
+    width: min(1000px, calc(100% - 24px));
+    max-width: none;
+    max-height: calc(100dvh - 24px);
+    overflow: auto;
+    --h: 62dvh;
+  }
+  dialog.proj::backdrop { background: rgba(0, 0, 0, 0.72); }
+
+  .dlg-head {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--bg);
+    border-bottom: 1px solid var(--rule);
+    padding: 12px 16px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 3ch;
+    align-items: start;
+  }
+  .dlg-head .t { text-transform: uppercase; font-weight: 600; }
+  .dlg-head .t .n { font-weight: 400; margin-right: 2ch; }
+  .dlg-head .m { color: var(--muted); }
+  .dlg-head .acts { display: flex; gap: 2ch; }
+
+  .dlg-body { padding: 16px; }
+
+  .stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 10;
+    width: min(100%, calc(var(--h) * 16 / 10));
+    margin: 0 auto;
+    border: 1px dashed var(--dash);
+    overflow: hidden;
+    color: var(--muted);
+  }
+  .stage.mobile { aspect-ratio: 9 / 16; width: min(100%, calc(var(--h) * 9 / 16)); }
+  .stage.has-img { border-style: solid; }
+  .stage img { display: block; width: 100%; height: 100%; object-fit: contain; }
+
+  .bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin: 10px auto 0;
+    width: min(100%, calc(62dvh * 16 / 10));
+  }
+  .bar .pos { font-variant-numeric: tabular-nums; }
+  .bar .nav { display: flex; gap: 2ch; }
+
+  .thumbs {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+  .thumb { flex: 0 0 auto; width: 116px; text-align: left; color: var(--muted); }
+  .thumb:hover { text-decoration: none; color: var(--fg); }
+  .thumb .f {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 10;
+    border: 1px dashed var(--dash);
+    overflow: hidden;
+  }
+  .thumb .f img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+  .thumb .l { display: block; margin-top: 4px; }
+  .thumb[aria-current="true"] { color: var(--fg); }
+  .thumb[aria-current="true"] .f { border: 1px solid var(--fg); }
+
+  @media (max-width: 420px) {
+    .dlg-body { padding: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="id">
+      <strong>Pedro Paiva</strong>
+      <span>Frontend Developer</span>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <section class="hero" data-step="0" aria-label="About">
+      <p>I build interfaces for large-scale digital products.</p>
+      <ul>
+        <li>JavaScript</li>
+        <li>React</li>
+        <li>Laravel</li>
+        <li>Next.js</li>
+        <li>React Native</li>
+        <li>HTML / CSS</li>
+      </ul>
+    </section>
+
+    <section class="block" id="work" data-step="1" aria-labelledby="h-work">
+      <h2 id="h-work"><span class="n">01</span>Selected work</h2>
+      <hr class="rule">
+      <ul class="rows">
+        <li><a class="row" href="#correio-popular" data-project="correio-popular"><span>01</span><span class="title">Correio Popular</span><span class="arrow" aria-hidden="true">→</span><span class="meta">Media platform · Frontend</span></a></li>
+        <li><a class="row" href="#o-popular" data-project="o-popular"><span>02</span><span class="title">O Popular</span><span class="arrow" aria-hidden="true">→</span><span class="meta">Media platform · Frontend</span></a></li>
+        <li><a class="row" href="https://www.hojeemdia.com.br/" target="_blank" rel="noopener"><span>03</span><span class="title">Hoje em Dia</span><span class="arrow" aria-hidden="true">↗</span><span class="meta">Media platform · Frontend</span></a></li>
+        <li><a class="row" href="https://jmonline.com.br/" target="_blank" rel="noopener"><span>04</span><span class="title">JM Online</span><span class="arrow" aria-hidden="true">↗</span><span class="meta">Media platform · Frontend</span></a></li>
+      </ul>
+    </section>
+
+    <section class="block product" id="product" data-step="2" aria-labelledby="h-product">
+      <h2 id="h-product"><span class="n">02</span>Product</h2>
+      <hr class="rule">
+      <p>Sales management platform<br>Large Brazilian retail network</p>
+      <a class="cta" href="https://medium.com/user-experience-design-1/designing-a-merchandise-management-dashboard-for-a-large-brazilian-retailer-a-ux-ase-study-63fb1b5dc9ce" target="_blank" rel="noopener">[ case study → ]</a>
+    </section>
+
+    <section class="block" id="writing" data-step="3" aria-labelledby="h-writing">
+      <h2 id="h-writing"><span class="n">03</span>Writings</h2>
+      <hr class="rule">
+      <ul class="rows loose">
+        <li><a class="writing" href="https://medium.com/@artistapedro/the-dom-what-is-it-what-is-it-for-how-does-it-work-b3ca90c4dfca" target="_blank" rel="noopener"><span>2022</span><span class="title">The DOM. What is it?<br>What is it for? How does it work?</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+        <li><a class="writing" href="https://medium.com/@artistapedro/whats-the-difference-between-function-expressions-and-functions-declarations-adc974990411" target="_blank" rel="noopener"><span>2022</span><span class="title">Function expressions vs declarations</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+        <li><a class="writing" href="https://medium.com/@artistapedro/objects-in-javascript-fabfffc08abc" target="_blank" rel="noopener"><span>2022</span><span class="title">Objects in JavaScript</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+      </ul>
+    </section>
+
+    <section class="block" id="contact" data-step="4" aria-labelledby="h-contact">
+      <h2 id="h-contact"><span class="n">04</span>Contact</h2>
+      <hr class="rule">
+      <a class="contact-link" href="https://www.linkedin.com/in/pedro-paiva-frontend/" target="_blank" rel="noopener"><span>LinkedIn</span><span aria-hidden="true">↗</span></a>
+    </section>
+
+  </main>
+
+  <footer>
+    <strong>Pedro Paiva</strong>
+    Frontend Developer · Brazil
+  </footer>
+
+</div>
+
+<div class="theme" role="group" aria-label="Theme"><button type="button" data-theme-set="light" aria-pressed="false">light</button> / <button type="button" data-theme-set="dark" aria-pressed="false">dark</button></div>
+
+<dialog class="proj" id="proj" aria-labelledby="dlg-title">
+  <div class="dlg-head">
+    <div>
+      <div class="t"><span class="n" id="dlg-idx">01</span><span id="dlg-title">Project</span></div>
+      <div class="m" id="dlg-meta"></div>
+    </div>
+    <div class="acts">
+      <a id="dlg-live" href="#" target="_blank" rel="noopener">Live ↗</a>
+      <button type="button" id="dlg-close" aria-label="Close project">Close</button>
+    </div>
+  </div>
+  <div class="dlg-body">
+    <div class="stage" id="stage"></div>
+    <div class="bar">
+      <span><span class="pos" id="pos">01 / 04</span> &nbsp;<span id="lbl"></span></span>
+      <span class="nav">
+        <button type="button" id="prev" aria-label="Previous screen">← prev</button>
+        <button type="button" id="next" aria-label="Next screen">next →</button>
+      </span>
+    </div>
+    <div class="thumbs" id="thumbs" role="group" aria-label="Screens"></div>
+  </div>
+</dialog>
+
+<script>
+  // Screenshots. To swap an image, replace the file in /assets (keep the name)
+  // or point the key to a new path.
+  var SHOTS = {
+  'home': 'assets/correio-home.webp',
+  'section': 'assets/correio-section.webp',
+  'article': 'assets/correio-article.webp',
+  'mobile': 'assets/correio-mobile.webp',
+  'op-home': 'assets/opopular-home.webp',
+  'op-feed': 'assets/opopular-feed.webp',
+  'op-article': 'assets/opopular-article.webp',
+  'op-mobile': 'assets/opopular-mobile.webp'
+  };
+</script>
+
+<script>
+  // ---------- theme ----------
+  (function () {
+    var root = document.documentElement;
+    var btns = [].slice.call(document.querySelectorAll('[data-theme-set]'));
+    var mq = matchMedia('(prefers-color-scheme: light)');
+    function current() {
+      var t = root.getAttribute('data-theme');
+      return t ? t : (mq.matches ? 'light' : 'dark');
+    }
+    function paint() {
+      var c = current();
+      btns.forEach(function (b) {
+        b.setAttribute('aria-pressed', String(b.getAttribute('data-theme-set') === c));
+      });
+    }
+    try {
+      var s = localStorage.getItem('theme');
+      if (s === 'light' || s === 'dark') root.setAttribute('data-theme', s);
+    } catch (e) {}
+    btns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var next = b.getAttribute('data-theme-set');
+        root.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch (e) {}
+        paint();
+      });
+    });
+    if (mq.addEventListener) mq.addEventListener('change', paint);
+    paint();
+  })();
+
+  // ---------- project modal ----------
+  // To add real images, set `src` on a screen (a file path or a data: URI).
+  // `kind` is "desktop" (16:10 frame) or "mobile" (9:16 frame).
+  (function () {
+    var PROJECTS = [
+      { slug: 'correio-popular', title: 'Correio Popular', meta: 'Media platform · Frontend', url: 'https://correio.rac.com.br/',
+        screens: [
+          { label: 'home', kind: 'desktop', src: SHOTS['home'], w: 1440, h: 861 },
+          { label: 'section page', kind: 'desktop', src: SHOTS['section'], w: 1439, h: 861 },
+          { label: 'article', kind: 'desktop', src: SHOTS['article'], w: 720, h: 860 },
+          { label: 'mobile menu', kind: 'mobile', src: SHOTS['mobile'], w: 440, h: 858 }
+        ] },
+      { slug: 'o-popular', title: 'O Popular', meta: 'Media platform · Frontend', url: 'https://opopular.com.br/',
+        screens: [
+          { label: 'home', kind: 'desktop', src: SHOTS['op-home'], w: 1083, h: 863 },
+          { label: 'home · feed', kind: 'desktop', src: SHOTS['op-feed'], w: 1079, h: 862 },
+          { label: 'article', kind: 'desktop', src: SHOTS['op-article'], w: 1081, h: 861 },
+          { label: 'mobile', kind: 'mobile', src: SHOTS['op-mobile'], w: 329, h: 861 }
+        ] }
+    ];
+
+    var dlg = document.getElementById('proj');
+    var elIdx = document.getElementById('dlg-idx');
+    var elTitle = document.getElementById('dlg-title');
+    var elMeta = document.getElementById('dlg-meta');
+    var elLive = document.getElementById('dlg-live');
+    var stage = document.getElementById('stage');
+    var pos = document.getElementById('pos');
+    var lbl = document.getElementById('lbl');
+    var thumbs = document.getElementById('thumbs');
+    var bar = document.querySelector('.bar');
+    var state = { p: null, i: 0 };
+
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+    function find(slug) {
+      for (var k = 0; k < PROJECTS.length; k++) if (PROJECTS[k].slug === slug) return PROJECTS[k];
+      return null;
+    }
+
+    function renderScreen() {
+      var p = state.p, s = p.screens[state.i];
+      stage.className = 'stage ' + s.kind + (s.src ? ' has-img' : '');
+      if (s.w && s.h) {
+        stage.style.aspectRatio = s.w + ' / ' + s.h;
+        stage.style.width = 'min(100%, calc(var(--h) * ' + (s.w / s.h) + '))';
+      } else {
+        stage.style.aspectRatio = '';
+        stage.style.width = '';
+      }
+      bar.style.width = stage.style.width;
+      stage.textContent = '';
+      if (s.src) {
+        var img = document.createElement('img');
+        img.src = s.src;
+        img.alt = p.title + ' — ' + s.label;
+        stage.appendChild(img);
+      } else {
+        var ph = document.createElement('span');
+        ph.textContent = '[ screenshot · ' + s.label + ' ]';
+        stage.appendChild(ph);
+      }
+      pos.textContent = pad(state.i + 1) + ' / ' + pad(p.screens.length);
+      lbl.textContent = s.label;
+      var btns = thumbs.children;
+      for (var k = 0; k < btns.length; k++) {
+        if (k === state.i) btns[k].setAttribute('aria-current', 'true');
+        else btns[k].removeAttribute('aria-current');
+      }
+    }
+
+    function renderProject() {
+      var p = state.p;
+      elIdx.textContent = pad(PROJECTS.indexOf(p) + 1);
+      elTitle.textContent = p.title;
+      elMeta.textContent = p.meta;
+      if (p.url) { elLive.href = p.url; elLive.hidden = false; } else { elLive.hidden = true; }
+      thumbs.textContent = '';
+      p.screens.forEach(function (s, k) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'thumb';
+        b.setAttribute('aria-label', 'Screen ' + (k + 1) + ': ' + s.label);
+        var f = document.createElement('span');
+        f.className = 'f';
+        if (s.src) {
+          var im = document.createElement('img');
+          im.src = s.src; im.alt = '';
+          f.appendChild(im);
+        }
+        var l = document.createElement('span');
+        l.className = 'l';
+        l.textContent = s.label;
+        b.appendChild(f); b.appendChild(l);
+        b.addEventListener('click', function () { state.i = k; renderScreen(); });
+        thumbs.appendChild(b);
+      });
+      renderScreen();
+    }
+
+    function go(d) {
+      var n = state.p.screens.length;
+      state.i = (state.i + d + n) % n;
+      renderScreen();
+    }
+
+    function setHash(slug) {
+      try { if (location.hash !== '#' + slug) location.hash = slug; } catch (e) {}
+    }
+    function clearHash() {
+      try {
+        if (find(location.hash.slice(1))) history.replaceState(null, '', location.pathname + location.search);
+      } catch (e) {}
+    }
+
+    function open(slug) {
+      var p = find(slug);
+      if (!p) return;
+      if (!(dlg.open && state.p === p)) {
+        state.p = p; state.i = 0;
+        renderProject();
+        if (!dlg.open) dlg.showModal();
+        dlg.scrollTop = 0;
+      }
+      setHash(slug);
+    }
+
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest ? e.target.closest('[data-project]') : null;
+      if (!a) return;
+      e.preventDefault();
+      open(a.getAttribute('data-project'));
+    });
+
+    document.getElementById('dlg-close').addEventListener('click', function () { dlg.close(); });
+    document.getElementById('prev').addEventListener('click', function () { go(-1); });
+    document.getElementById('next').addEventListener('click', function () { go(1); });
+
+    dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener('close', function () { state.p = null; clearHash(); });
+    dlg.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+    });
+
+    function fromHash() {
+      var slug = location.hash.slice(1);
+      if (find(slug)) open(slug);
+      else if (dlg.open) dlg.close();
+    }
+    addEventListener('hashchange', fromHash);
+    fromHash();
+  })();
+</script>
+</body>
+</html>
