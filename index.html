@@ -67,7 +67,8 @@
   header .id span { display: block; }
 
   /* ---------- hero ---------- */
-  .hero { padding: 36px 0 44px; }
+  /* Offset text block inside the centered column (asymmetric indent) */
+  .hero { padding: 36px 0 44px; margin-left: 15ch; max-width: 22ch; }
   .hero p { margin: 0 0 1.6em; }
   .hero ul { list-style: none; margin: 0; padding: 0; }
 
@@ -192,6 +193,7 @@
   .thumb[aria-current="true"] .f { border: 1px solid var(--fg); }
 
   @media (max-width: 420px) {
+    .hero { margin-left: 8ch; }
     .dlg-body { padding: 12px; }
   }
 </style>
